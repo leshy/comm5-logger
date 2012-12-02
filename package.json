@@ -1,0 +1,19 @@
+{
+    "name": "comm-logger",
+    "version": "0.0.1",
+    "description": "comm-logger",
+    "private": true,
+    "author": {
+        "name": "Ivan Nikolic [lesh]",
+        "email": "lesh@sysphere.org"
+    },
+    "dependencies": {
+        "comm": "git://github.com/leshy/nodejs-comm5.git"
+    },
+    "main": "index",
+    "engines": {
+        "node": "node >= 0.4.x"
+    }
+}
+
+
