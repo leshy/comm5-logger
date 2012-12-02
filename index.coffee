@@ -1,4 +1,5 @@
 comm = require 'comm/serverside'
+_ = require 'underscore'
 color = require 'color'
 
 # I only need console logger for now,
@@ -6,15 +7,17 @@ color = require 'color'
 # roundrobin collection could easily be implemented by a collection subclass with automatic
 # per log entry index numbering
 
-
 exports.logger = logger = comm.MsgNode.extend4000
     log: (text,data,tags...) ->
-        @msg({tags: tags, text: text, data: data, time: new Date().getTime()})
-
-
+        tagshash = {}
+        _.map tags, (tag) -> tagshash[tag] = true
+        @msg({tags: tagshash, text: text, data: data, time: new Date().getTime()})
 
 exports.consoleLogger = consoleLogger = logger.extend4000
     initialize: ->
-        @subscribe { tags: true }, (msg,reply,next,transmit) ->
-            console.log String(new Date(msg.time)).yellow + " " + msg.tags.join(', ').green + " " + msg.text + " " + JSON.stringify(msg.data)
+        @subscribe true, (msg,reply,next,transmit) ->
+            text = msg.text
+            if msg.tags.error then text = text.red
+                
+            console.log String(new Date(msg.time)).yellow + " " + _.keys(msg.tags).join(', ').green + " " + text + " " + JSON.stringify(msg.data)
             reply.end(); next(); transmit();
