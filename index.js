@@ -23,12 +23,17 @@
   exports.consoleLogger = consoleLogger = logger.extend4000({
     initialize: function() {
       return this.subscribe(true, function(msg, reply, next, transmit) {
-        var text;
+        var json, text;
         text = msg.text;
         if (msg.tags.error) {
           text = text.red;
         }
-        console.log(String(new Date(msg.time)).yellow + " " + _.keys(msg.tags).join(', ').green + " " + text + " " + JSON.stringify(msg.data));
+        if (msg.tags.error && _.keys(msg.data).length) {
+          json = " " + JSON.stringify(msg.data);
+        } else {
+          json = "";
+        }
+        console.log(String(new Date(msg.time)).yellow + " " + _.keys(msg.tags).join(', ').green + " " + text + json);
         reply.end();
         next();
         return transmit();

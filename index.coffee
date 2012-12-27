@@ -18,6 +18,6 @@ exports.consoleLogger = consoleLogger = logger.extend4000
         @subscribe true, (msg,reply,next,transmit) ->
             text = msg.text
             if msg.tags.error then text = text.red
-                
-            console.log String(new Date(msg.time)).yellow + " " + _.keys(msg.tags).join(', ').green + " " + text + " " + JSON.stringify(msg.data)
+            if msg.tags.error and _.keys(msg.data).length then json = " " + JSON.stringify(msg.data) else json = ""
+            console.log String(new Date(msg.time)).yellow + " " + _.keys(msg.tags).join(', ').green + " " + text + json
             reply.end(); next(); transmit();
